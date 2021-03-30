@@ -1,0 +1,14 @@
+# https://www.websequencediagrams.com/
+# Sequence diagram of when a new note is added to example app:
+# https://studies.cs.helsinki.fi/exampleapp/notes
+
+title Posting New Note
+
+browser->server: HTTP POST /new_note
+server-->browser: redirect /notes
+browser->server: HTTP GET main.css
+server-->browser: main.css
+browser->server: HTTP GET main.js
+server-->browser: main.js
+browser->server: HTTP GET data.json
+server-->browser: data.json

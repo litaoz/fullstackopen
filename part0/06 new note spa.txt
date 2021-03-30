@@ -1,0 +1,11 @@
+# https://www.websequencediagrams.com/
+title Posting New Note SPA
+
+note over browser:
+user enters new note
+end note
+browser->browser: append note to local
+note over browser:
+browser redraws
+end note
+browser->server: HTTP POST /new_note_spa
