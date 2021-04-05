@@ -46,14 +46,16 @@ const Statistics = (props) => {
   return(
     <div>
       <h2>statistics</h2>
-
-        <Statistic label='good' value={good}/>
-        <Statistic label='neutral' value={neutral}/>
-        <Statistic label='bad' value={bad}/>
-        <Statistic label='all' value={totalcount}/>
-        <Statistic label='average' value={average}/>
-        <Statistic label='positive' value={percentpositive + ' %'}/>
-
+      <table>
+        <tbody>
+          <Statistic label='good' value={good}/>
+          <Statistic label='neutral' value={neutral}/>
+          <Statistic label='bad' value={bad}/>
+          <Statistic label='all' value={totalcount}/>
+          <Statistic label='average' value={average}/>
+          <Statistic label='positive' value={percentpositive + ' %'}/>
+        </tbody>
+      </table>
     </div>
   )
 }
@@ -61,7 +63,10 @@ const Statistics = (props) => {
 const Statistic = (props) => {
   const {label, value} = props
   return (
-  <div>{label} {value}</div>
+  <tr>
+    <td>{label}</td>
+    <td>{value}</td>
+  </tr>
   )
 }
 
