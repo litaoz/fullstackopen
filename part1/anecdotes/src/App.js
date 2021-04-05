@@ -1,5 +1,10 @@
 import React, {useState} from 'react'
 
+const randomInt = (num) => {
+  // Returns a int from [0, num) 
+  return Math.floor(Math.random() * num)
+}
+
 const App = () => {
   const anecdotes = [
     'If it hurts, do it more often',
@@ -10,17 +15,25 @@ const App = () => {
     'Debuggin is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.'
   ]
 
-  const randomInt = (num) => {
-    // Returns a int from [0, num) 
-    return Math.floor(Math.random() * num)
-  }
-
   const [selected, setSelected] = useState(randomInt(anecdotes.length))
+  const [points, setPoints] = useState(new Array(anecdotes.length).fill(0))
+  const copy = [...points]
+
+  const vote = (selected) => {
+    copy[selected] += 1
+    setPoints(copy)
+  }
 
   return (
     <div>
-      {anecdotes[selected]}
+      <div>
+        {anecdotes[selected]}
+      </div>
+      <div>
+        has {points[selected]} votes
+      </div>
       <p>
+        <button onClick={() => {vote(selected)}}>vote</button>
         <button onClick={() => {setSelected(randomInt(anecdotes.length))}}>next anecdote</button>
       </p>
     </div>
