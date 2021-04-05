@@ -13,11 +13,18 @@ const Feedback = (props) => {
   )
 }
 
+
+
 const App = () => {
   // save clicks of each button to its own state
   const [good, setGood] = useState(0)
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
+
+  const totalcount = good + neutral + bad
+  const totalscore = good * 1 + neutral * 0 + bad * -1
+  const average =  totalscore / totalcount
+  const percentpositive = good / totalcount * 100
 
   return (
     <div>
@@ -29,7 +36,10 @@ const App = () => {
         <p>
           good {good}<br/>
           neutral {neutral}<br/>
-          bad {bad}
+          bad {bad}<br/>
+          all {totalcount}<br/>
+          average {average}><br/>
+          positive {percentpositive}
         </p>
       </div>
     </div>
