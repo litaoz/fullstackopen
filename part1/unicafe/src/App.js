@@ -1,15 +1,27 @@
 import React, {useState} from 'react'
 
 const Feedback = (props) => {
+  // Properties
   const {addGood, addNeutral, addBad} = props
 
+  // Display
   return (
     <div>
       <h2>give feedback</h2>
-      <button onClick={addGood}>good</button>
-      <button onClick={addNeutral}>neutral</button>
-      <button onClick={addBad}>bad</button>
+      <FeedbackButton handler={addGood} text='good'/>
+      <FeedbackButton handler={addNeutral} text='neutral'/>
+      <FeedbackButton handler={addBad} text='bad'/>
     </div>
+  )
+}
+
+const FeedbackButton = (props) => {
+  // Properties
+  const {handler, text} = props
+
+  // Display
+  return (
+    <button onClick={handler}>{text}</button>
   )
 }
 
@@ -34,15 +46,22 @@ const Statistics = (props) => {
   return(
     <div>
       <h2>statistics</h2>
-      <p>
-        good {good}<br/>
-        neutral {neutral}<br/>
-        bad {bad}<br/>
-        all {totalcount}<br/>
-        average {average.toFixed(2)}<br/>
-        positive {percentpositive.toFixed(2)} %
-      </p>
+
+        <Statistic label='good' value={good}/>
+        <Statistic label='neutral' value={neutral}/>
+        <Statistic label='bad' value={bad}/>
+        <Statistic label='all' value={totalcount}/>
+        <Statistic label='average' value={average}/>
+        <Statistic label='positive' value={percentpositive + ' %'}/>
+
     </div>
+  )
+}
+
+const Statistic = (props) => {
+  const {label, value} = props
+  return (
+  <div>{label} {value}</div>
   )
 }
 
