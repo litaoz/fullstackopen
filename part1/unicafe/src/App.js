@@ -24,6 +24,13 @@ const Statistics = (props) => {
   const percentpositive = good / totalcount * 100
 
   // Display
+  if (totalcount === 0) {
+    return (
+      <div>
+        <p>No feedback given</p>
+      </div>
+    )
+  }
   return(
     <div>
       <h2>statistics</h2>
