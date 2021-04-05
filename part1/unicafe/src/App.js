@@ -1,23 +1,22 @@
-import logo from './logo.svg';
-import './App.css';
+import React, {useState} from 'react'
 
-function App() {
+
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <div>
+        <h2>give feedback</h2>
+        <button>good</button>
+        <button>neutral</button>
+        <button>bad</button>
+      </div>
+      <div>
+        <h2>statistics</h2>
+        <p>good 6</p>
+        <p>neutral 2</p>
+        <p>bad 1</p>
+      </div>
     </div>
   );
 }
