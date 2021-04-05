@@ -5,6 +5,26 @@ const randomInt = (num) => {
   return Math.floor(Math.random() * num)
 }
 
+const maxIndex = (arr) => {
+  // Returns the first index of the max value
+  const maxValue = Math.max(...arr)
+  return arr.indexOf(maxValue)
+}
+
+const Anecdote = (props) => {
+  const {anecdotes, points, selected} = props
+  return (
+    <div>
+      <div>
+        {anecdotes[selected]}
+      </div>
+      <div>
+        has {points[selected]} votes
+      </div>
+    </div>
+  )
+}
+
 const App = () => {
   const anecdotes = [
     'If it hurts, do it more often',
@@ -18,6 +38,7 @@ const App = () => {
   const [selected, setSelected] = useState(randomInt(anecdotes.length))
   const [points, setPoints] = useState(new Array(anecdotes.length).fill(0))
   const copy = [...points]
+  const maxVotesIndex = maxIndex(points)
 
   const vote = (selected) => {
     copy[selected] += 1
@@ -25,17 +46,20 @@ const App = () => {
   }
 
   return (
-    <div>
-      <div>
-        {anecdotes[selected]}
+    <div className='app'>
+      <div className='anecdote-of-day'>
+        <h1>Anecdote of the day</h1>
+        <Anecdote anecdotes={anecdotes} points={points} selected={selected}/>
+        <p>
+          <button onClick={() => {vote(selected)}}>vote</button>
+          <button onClick={() => {setSelected(randomInt(anecdotes.length))}}>next anecdote</button>
+        </p>
       </div>
-      <div>
-        has {points[selected]} votes
+
+      <div className='highest-vote'>
+        <h1>Anecdote with the most votes</h1>
+        <Anecdote anecdotes={anecdotes} points={points} selected={maxVotesIndex}/>
       </div>
-      <p>
-        <button onClick={() => {vote(selected)}}>vote</button>
-        <button onClick={() => {setSelected(randomInt(anecdotes.length))}}>next anecdote</button>
-      </p>
     </div>
   );
 }
