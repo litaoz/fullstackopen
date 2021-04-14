@@ -20,7 +20,7 @@ const App = () => {
 
   // Effects
   useEffect(() => {
-    axios.get('http://localhost:3001/all')
+    axios.get('https://restcountries.eu/rest/v2/all')
       .then((response) => {
         const data = response.data
         setCountries(data)
