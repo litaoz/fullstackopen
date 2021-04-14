@@ -36,10 +36,7 @@ const App = () => {
   return(
     <div>
       <Filter filter={filter} changeFilter={changeFilter} />
-      <Results countries={countriesToShow}/>
-      {/* <div>
-        countriesToShow.map(country => <div>{country.name}</div>)}
-      </div> */}
+      <Results countries={countriesToShow} setFilter={setFilter}/>
     </div>
   )
 }

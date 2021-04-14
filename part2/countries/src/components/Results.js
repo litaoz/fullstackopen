@@ -1,7 +1,7 @@
 import React from 'react'
 
 const Results = (props) => {
-    const {countries} = props
+    const {countries, setFilter} = props
     const numOfcountries = countries.length
 
     if (numOfcountries > 10) {
@@ -15,8 +15,8 @@ const Results = (props) => {
         return (
             <div>
                 <h2>{country.name}</h2>
-                <div>capital</div>
-                <div>population</div>
+                <div>capital {country.capital}</div>
+                <div>population {country.population}</div>
                 <div>
                     <h3>languages</h3>
                     <ul>
@@ -29,11 +29,14 @@ const Results = (props) => {
             </div>)
     }
 
-    return(
-        <div>
-            {countries.map(country => <div key={country.alpha3Code}>{country.name}</div>)}
-        </div>
-    )
+  return(
+    <div>
+      {countries.map(country => 
+        <div key={country.alpha3Code}>{country.name}
+          <button type='button' onClick={() => setFilter(country.name)}>show</button>
+        </div>)}
+    </div>
+  )
 }
 
 export default Results
