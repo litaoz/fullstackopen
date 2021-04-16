@@ -8,13 +8,13 @@ const getAll = () => {
     return responseData
 }
 
-const create = (person) => {
+const post = (person) => {
     return axios.post(baseUrl, person)
 }
 
-const update = (person) => {
+const put = (person) => {
     return axios.put(baseUrl, person)
 }
 
-const functions = {getAll, create, update}
+const functions = {getAll, post, put}
 export default functions
