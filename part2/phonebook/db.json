@@ -22,18 +22,13 @@
     },
     {
       "name": "John",
-      "number": "213",
+      "number": "143",
       "id": 5
     },
     {
-      "name": "Aaron",
-      "number": "4123",
+      "name": "Jill",
+      "number": "143",
       "id": 6
-    },
-    {
-      "name": "Mary",
-      "number": "514",
-      "id": 7
     }
   ]
 }

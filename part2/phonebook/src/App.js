@@ -26,18 +26,32 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault()
-
     const newPerson = {
       name: newName,
       number: newNumber
     }
     if (persons.find(person => person.name === newName) === undefined) {
-      setPersons(persons.concat(newPerson))
-      postPerson(newPerson);
-      setNewName('')
-      setNewNumber('')
+      postPerson(newPerson)
+        .then((data) => {
+          setPersons(persons.concat(data))
+          setNewName('')
+          setNewNumber('')
+        })
+        .catch((error) => {alert('An error in the posting person has occured.')})
     } else {
       alert(`${newName} is already added to the phonebook`)
+    }
+  }
+
+  const deletePerson = (person) => {
+    return () => {
+      const confirmation = window.confirm(`Delete ${person.name}?`)
+      if (confirmation) {
+        personService.del(person)
+        .then(() => {
+          setPersons(persons.filter(existingPerson => existingPerson.id !== person.id))
+        })
+      }
     }
   }
 
@@ -71,7 +85,8 @@ const App = () => {
                   newNumber={newNumber}
                   changeNumber={changeNumber}/>
       <h2>Numbers</h2>
-      <Persons personsToShow={personsToShow}/>
+      <Persons personsToShow={personsToShow}
+               deletePerson={deletePerson}/>
     </div>
   )
 }
