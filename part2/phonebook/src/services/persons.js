@@ -16,11 +16,15 @@ const post = (person) => {
 }
 
 const put = (person) => {
-    return axios.put(baseUrl, person)
+    const url = `${baseUrl}/${person.id}`
+    const request = axios.put(url, person)
+    const responseData = request.then(response => response.data)
+    return responseData
 }
 
 const del = (person) => {
-    return axios.delete(`${baseUrl}/${person.id}`)
+    const url = `${baseUrl}/${person.id}`
+    return axios.delete(url)
 }
 
 const functions = {getAll, post, put, del}

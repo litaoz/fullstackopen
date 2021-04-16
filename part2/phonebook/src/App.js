@@ -30,16 +30,24 @@ const App = () => {
       name: newName,
       number: newNumber
     }
-    if (persons.find(person => person.name === newName) === undefined) {
-      postPerson(newPerson)
-        .then((data) => {
-          setPersons(persons.concat(data))
-          setNewName('')
-          setNewNumber('')
-        })
-        .catch((error) => {alert('An error in the posting person has occured.')})
+    const existingPerson = persons.find(person => person.name === newName)
+    if (existingPerson) {
+      const confirmation = window.confirm(`${existingPerson.name} is already added to phonebook, replace the old number with a new one?`)
+      if (confirmation) {
+        const changedPerson = {...existingPerson, number: newNumber}
+        personService.put(changedPerson)
+          .then((data) => {
+            setPersons(persons.map(person => person.id !== data.id ? person : data))
+          })
+      }
     } else {
-      alert(`${newName} is already added to the phonebook`)
+      postPerson(newPerson)
+      .then((data) => {
+        setPersons(persons.concat(data))
+        setNewName('')
+        setNewNumber('')
+      })
+      .catch((error) => {alert('An error in the posting person has occured.')})
     }
   }
 
@@ -59,7 +67,7 @@ const App = () => {
   const changeFilter = (event) => {
     setFilter(event.target.value)
   }
-
+ 
   const changeName = (event) => {
     setNewName(event.target.value)
   }
