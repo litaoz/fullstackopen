@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react'
 import personService from './services/persons'
 
 // Components
+import Notification from './components/Notification'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
@@ -13,6 +14,8 @@ const App = () => {
   const [ filter, setFilter ] = useState('')
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
+  const [ message, setMessage ] = useState('')
+  const [ messageType, setMessageType ] = useState('info')
 
   // Service functions
   useEffect(() => {
@@ -46,8 +49,12 @@ const App = () => {
         setPersons(persons.concat(data))
         setNewName('')
         setNewNumber('')
+        notify(`Added ${data.name}`, 'info')
       })
-      .catch((error) => {alert('An error in the posting person has occured.')})
+      .catch((error) => {
+        // setMessage(`Error ${}`)
+        alert('An error in the posting person has occured.')
+      })
     }
   }
 
@@ -58,6 +65,9 @@ const App = () => {
         personService.del(person)
         .then(() => {
           setPersons(persons.filter(existingPerson => existingPerson.id !== person.id))
+        })
+        .catch(() => {
+          //
         })
       }
     }
@@ -76,6 +86,15 @@ const App = () => {
     setNewNumber(event.target.value)
   }
 
+  // Notification management
+  const notify = (message, type) => {
+    setMessage(message)
+    setMessageType(type)
+    setTimeout(() => {
+      setMessage('')
+    }, 5000)
+  }
+
   // Filter
   const personsToShow = filter !== '' 
     ? persons.filter((person) => person.name.toLowerCase().includes(filter)) 
@@ -85,6 +104,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} type={messageType}/>
       <Filter filter={filter} changeFilter={changeFilter}/>
       <h2>Add New</h2>
       <PersonForm addPerson={addPerson} 
