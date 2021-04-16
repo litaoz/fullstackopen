@@ -19,9 +19,13 @@ const App = () => {
 
   // Service functions
   useEffect(() => {
-    personService.getAll()
-      .then(data => setPersons(data))
+    getAllPersons()
   }, [])
+
+  const getAllPersons = () => {
+    return personService.getAll()
+      .then(data => setPersons(data))
+  }
 
   const postPerson = (person) => {
     return personService.post(person)
@@ -41,6 +45,10 @@ const App = () => {
         personService.put(changedPerson)
           .then((data) => {
             setPersons(persons.map(person => person.id !== data.id ? person : data))
+          })
+          .catch(() => {
+            notify(`Information of ${existingPerson.name} has already been removed from server`, 'error')
+            getAllPersons()
           })
       }
     } else {
