@@ -146,7 +146,7 @@ describe('favoriteBlog', () => {
   })
 })
 
-describe.only('mostBlogs', () => {
+describe('mostBlogs', () => {
   test('mostBlogs, empty blogs', () => {
     const blogs = []
     expect(listHelper.mostBlogs(blogs)).toEqual({})
@@ -224,5 +224,86 @@ describe.only('mostBlogs', () => {
       { 'author': 'arther', 'blogs': 2 },
       { 'author': 'Bob', 'blogs': 2 }
     ]).toContainEqual(listHelper.mostBlogs(blogs))
+  })
+})
+
+describe('mostLikes', () => {
+  test('mostLikes, empty blogs', () => {
+    const blogs = []
+    expect(listHelper.mostLikes(blogs)).toEqual({})
+  })
+  test('mostLikes, one blog', () => {
+    const blogs = [
+      {
+        'title': 'Tantalizing',
+        'author': 'arther',
+        'url': 'me.com',
+        'likes': 5,
+        'id': '60b3a83685d9f40d64fd8cd0'
+      }
+    ]
+    expect(listHelper.mostLikes(blogs)).toEqual({ 'author': 'arther', 'likes': 5 })
+  })
+  test('mostLikes, three blogs', () => {
+    const blogs = [
+      {
+        'title': 'Tantalizing',
+        'author': 'Bob',
+        'url': 'me.com',
+        'likes': 7,
+        'id': '60b3a83685d9f40d64fd8cd0'
+      },
+      {
+        'title': 'Trek',
+        'author': 'arther',
+        'url': 'me.com',
+        'likes': 5,
+        'id': '60b3ac6478024b26d85f8d24'
+      },
+      {
+        'title': 'Train',
+        'author': 'arther',
+        'url': 'me.com',
+        'likes': 5,
+        'id': '60b3aecb5fad71380c0952cf'
+      },
+    ]
+    expect(listHelper.mostLikes(blogs)).toEqual({ 'author': 'arther', 'likes': 10 })
+  })
+  test('mostLikes, four blogs, two same', () => {
+    const blogs = [
+      {
+        'title': 'Tantalizing',
+        'author': 'Bob',
+        'url': 'me.com',
+        'likes': 7,
+        'id': '60b3a83685d9f40d64fd8cd0'
+      },
+      {
+        'title': 'Trek',
+        'author': 'arther',
+        'url': 'me.com',
+        'likes': 8,
+        'id': '60b3ac6478024b26d85f8d24'
+      },
+      {
+        'title': 'Missile',
+        'author': 'Bob',
+        'url': 'me.com',
+        'likes': 8,
+        'id': '60b3aecb5fad71380c0952cf'
+      },
+      {
+        'title': 'Tractor',
+        'author': 'arther',
+        'url': 'me.com',
+        'likes': 7,
+        'id': '60b3aecb5fad71380c0952cf'
+      }
+    ]
+    expect([
+      { 'author': 'arther', 'likes': 15 },
+      { 'author': 'Bob', 'likes': 15 }
+    ]).toContainEqual(listHelper.mostLikes(blogs))
   })
 })
