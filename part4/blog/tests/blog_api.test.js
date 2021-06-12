@@ -52,7 +52,7 @@ test('posting a blog', async () => {
   expect(allTitles).toContain('testing')
 })
 
-test.only('posting a blog without likes property', async () => {
+test('posting a blog without likes property', async () => {
   const newBlog = {
     'title': 'no likes',
     'author': 'arther',
@@ -63,6 +63,17 @@ test.only('posting a blog without likes property', async () => {
     .send(newBlog)
   expect(response.body.likes).toBeDefined()
   expect(response.body.likes).toEqual(0)
+})
+
+test('posting a blog without title and url errors', async () => {
+  const newBlog = {
+    'author': 'arther',
+    'likes': 5
+  }
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
 })
 
 afterAll(() => {

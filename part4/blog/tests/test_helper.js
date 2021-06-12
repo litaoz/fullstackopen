@@ -1,6 +1,8 @@
 const initBlogs = [
   {
-    'id': '60b3a79485d9f40d64fd8ccf'
+    'id': '60b3a79485d9f40d64fd8ccf',
+    'title': 'first',
+    'url': 'me.com'
   },
   {
     'title': 'Tantalizing',

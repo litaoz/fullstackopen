@@ -10,3 +10,12 @@ content-type: application/json
     "url": "me.com",
     "likes": 5
 }
+
+###
+POST http://localhost:3001/api/blogs
+content-type: application/json
+
+ {
+    "author": "arther",
+    "likes": 5
+}
