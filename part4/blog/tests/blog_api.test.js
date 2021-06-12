@@ -34,7 +34,7 @@ test('there are id\'s for blogs', async () => {
   }
 })
 
-test.only('posting a blog', async () => {
+test('posting a blog', async () => {
   const newBlog = {
     'title': 'testing',
     'author': 'arther',
@@ -50,6 +50,19 @@ test.only('posting a blog', async () => {
   expect(allResponse.body).toHaveLength(helper.initBlogs.length + 1)
   const allTitles = allResponse.body.map(blog => blog.title)
   expect(allTitles).toContain('testing')
+})
+
+test.only('posting a blog without likes property', async () => {
+  const newBlog = {
+    'title': 'no likes',
+    'author': 'arther',
+    'url': 'me.com'
+  }
+  const response = await api
+    .post('/api/blogs')
+    .send(newBlog)
+  expect(response.body.likes).toBeDefined()
+  expect(response.body.likes).toEqual(0)
 })
 
 afterAll(() => {
