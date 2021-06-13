@@ -76,6 +76,23 @@ test('posting a blog without title and url errors', async () => {
     .expect(400)
 })
 
+test('delete a blog', async () => {
+  const initialLength = helper.initBlogs.length
+
+  // Get id of first blog
+  let blogs = await api.get('/api/blogs')
+  const id = blogs.body[0].id
+
+  // delete first blog
+  await api
+    .delete(`/api/blogs/${id}`)
+    .expect(204)
+
+  // confirm length decreased by one
+  blogs = await api.get('/api/blogs')
+  expect(blogs.body).toHaveLength(initialLength - 1)
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
