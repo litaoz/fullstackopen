@@ -93,6 +93,26 @@ test('delete a blog', async () => {
   expect(blogs.body).toHaveLength(initialLength - 1)
 })
 
+test.only('delete a blog', async () => {
+  const editedBlog =   {
+    'title': 'edited',
+    'url': 'me.com'
+  }
+
+  // Get id of first blog
+  let blogs = await api.get('/api/blogs')
+  const id = blogs.body[0].id
+
+  // edit first blog
+  await api
+    .put(`/api/blogs/${id}`)
+    .send(editedBlog)
+
+  const allResponse = await api.get('/api/blogs')
+  const allTitles = allResponse.body.map(blog => blog.title)
+  expect(allTitles).toContain('edited')
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
