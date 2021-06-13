@@ -19,3 +19,16 @@ content-type: application/json
     "author": "arther",
     "likes": 5
 }
+
+###
+GET http://localhost:3001/api/users
+
+###
+POST http://localhost:3001/api/users
+content-type: application/json
+
+ {
+    "username": "tester",
+    "password": "1234",
+    "name": "Tammy"
+}

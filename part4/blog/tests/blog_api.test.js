@@ -93,7 +93,7 @@ test('delete a blog', async () => {
   expect(blogs.body).toHaveLength(initialLength - 1)
 })
 
-test.only('delete a blog', async () => {
+test('delete a blog', async () => {
   const editedBlog =   {
     'title': 'edited',
     'url': 'me.com'
