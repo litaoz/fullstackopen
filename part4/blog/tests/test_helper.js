@@ -1,3 +1,5 @@
+const bcrypt = require('bcryptjs')
+
 const initBlogs = [
   {
     'id': '60b3a79485d9f40d64fd8ccf',
@@ -69,6 +71,23 @@ const initBlogs = [
   }
 ]
 
+const saltRounds = 10
+const password = bcrypt.hash('1234', saltRounds)
+
+const initUsers = [
+  {
+    'username': 'firstUser',
+    'passwordHash': '$2a$10$zRDrrk1Q1N1NQp7WpvByFue7D28mb1prMcbqWsccK7uVrSHv8bDSS',
+    'name': 'Frank'
+  },
+  {
+    'username': 'secondUser',
+    'passwordHash': '$2a$10$zRDrrk1Q1N1NQp7WpvByFue7D28mb1prMcbqWsccK7uVrSHv8bDSS',
+    'name': 'Sarah'
+  }
+]
+
 module.exports = {
-  initBlogs
+  initBlogs,
+  initUsers
 }
