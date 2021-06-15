@@ -12,21 +12,26 @@ const User = require('../models/user')
 const globals = {}
 
 beforeAll(async () => {
-  const user1 = await User.findOne({ 'username': 'firstUser' })
-  globals.userId = user1.id
-
-  const user = await User.findOne({ 'username': 'secondUser' })
-  const userForToken = {
+  let user = await User.findOne({ 'username': 'firstUser' })
+  let userForToken = {
     username: user.username,
     id: user._id
   }
-  globals.token = jwt.sign(userForToken, process.env.SECRET)
+  globals.user1Id = user.id
+  globals.user1token = jwt.sign(userForToken, process.env.SECRET)
+
+  user = await User.findOne({ 'username': 'secondUser' })
+  userForToken = {
+    username: user.username,
+    id: user._id
+  }
+  globals.user2token = jwt.sign(userForToken, process.env.SECRET)
 })
 
 beforeEach(async () => {
   await Blog.deleteMany({})
   const blogObjects = helper.initBlogs
-    .map(blog => new Blog({ ...blog, 'user': globals.userId }))
+    .map(blog => new Blog({ ...blog, 'user': globals.user1Id }))
   const promiseArray = blogObjects.map(blog => blog.save())
   await Promise.all(promiseArray)
 })
@@ -64,9 +69,10 @@ test('posting a blog', async () => {
     'url': 'me.com',
     'likes': 5
   }
+  console.log(globals.user2token)
   const response = await api
     .post('/api/blogs')
-    .set('Authorization', 'bearer ' + globals.token)
+    .set('Authorization', 'bearer ' + globals.user2token)
     .send(newBlog)
   expect(response.body.title).toEqual('testing')
 
@@ -84,7 +90,7 @@ test('posting a blog without likes property', async () => {
   }
   const response = await api
     .post('/api/blogs')
-    .set('Authorization', 'bearer ' + globals.token)
+    .set('Authorization', 'bearer ' + globals.user2token)
     .send(newBlog)
   expect(response.body.likes).toBeDefined()
   expect(response.body.likes).toEqual(0)
@@ -97,7 +103,7 @@ test('posting a blog without title and url errors', async () => {
   }
   await api
     .post('/api/blogs')
-    .set('Authorization', 'bearer ' + globals.token)
+    .set('Authorization', 'bearer ' + globals.user2token)
     .send(newBlog)
     .expect(400)
 })
@@ -112,6 +118,7 @@ test('delete a blog', async () => {
   // delete first blog
   await api
     .delete(`/api/blogs/${id}`)
+    .set('Authorization', 'bearer ' + globals.user1token)
     .expect(204)
 
   // confirm length decreased by one
@@ -119,7 +126,19 @@ test('delete a blog', async () => {
   expect(blogs.body).toHaveLength(initialLength - 1)
 })
 
-test('delete a blog', async () => {
+test('delete a blog not authorized', async () => {
+  // Get id of first blog
+  let blogs = await api.get('/api/blogs')
+  const id = blogs.body[0].id
+
+  // delete first blog
+  await api
+    .delete(`/api/blogs/${id}`)
+    .set('Authorization', 'bearer ' + globals.user2token)
+    .expect(401)
+})
+
+test('edit a blog', async () => {
   const editedBlog =   {
     'title': 'edited',
     'url': 'me.com'
