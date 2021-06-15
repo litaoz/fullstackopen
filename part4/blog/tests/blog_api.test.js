@@ -27,10 +27,17 @@ test('there are ten blogs', async () => {
   expect(response.body).toHaveLength(10)
 })
 
-test('there are id\'s for blogs', async () => {
+test('there are ids for blogs', async () => {
   const response = await api.get('/api/blogs')
   for (let blog of response.body) {
     expect(blog.id).toBeDefined()
+  }
+})
+
+test('there are users for blogs', async () => {
+  const response = await api.get('/api/blogs')
+  for (let blog of response.body) {
+    expect(blog.user).toBeDefined()
   }
 })
 
