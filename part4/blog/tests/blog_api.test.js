@@ -116,7 +116,7 @@ test('posting a blog without title and url errors', async () => {
     .expect(400)
 })
 
-test.only('delete a blog', async () => {
+test('delete a blog', async () => {
   const initialLength = helper.initBlogs.length
 
   // Get id of first blog
@@ -138,7 +138,7 @@ test.only('delete a blog', async () => {
   expect(blogs.body).toHaveLength(initialLength - 1)
 })
 
-test.only('delete a blog not authorized', async () => {
+test('delete a blog not authorized', async () => {
   // Get id of first blog
   let blogs = await api
     .get('/api/blogs')
