@@ -1,16 +1,32 @@
 const app = require('../app')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
+const jwt = require('jsonwebtoken')
 
 const api = supertest(app)
 
 const helper = require('./test_helper')
 const Blog = require('../models/blog')
+const User = require('../models/user')
+
+const globals = {}
+
+beforeAll(async () => {
+  const user1 = await User.findOne({ 'username': 'firstUser' })
+  globals.userId = user1.id
+
+  const user = await User.findOne({ 'username': 'secondUser' })
+  const userForToken = {
+    username: user.username,
+    id: user._id
+  }
+  globals.token = jwt.sign(userForToken, process.env.SECRET)
+})
 
 beforeEach(async () => {
   await Blog.deleteMany({})
   const blogObjects = helper.initBlogs
-    .map(blog => new Blog(blog))
+    .map(blog => new Blog({ ...blog, 'user': globals.userId }))
   const promiseArray = blogObjects.map(blog => blog.save())
   await Promise.all(promiseArray)
 })
@@ -50,6 +66,7 @@ test('posting a blog', async () => {
   }
   const response = await api
     .post('/api/blogs')
+    .set('Authorization', 'bearer ' + globals.token)
     .send(newBlog)
   expect(response.body.title).toEqual('testing')
 
@@ -67,6 +84,7 @@ test('posting a blog without likes property', async () => {
   }
   const response = await api
     .post('/api/blogs')
+    .set('Authorization', 'bearer ' + globals.token)
     .send(newBlog)
   expect(response.body.likes).toBeDefined()
   expect(response.body.likes).toEqual(0)
@@ -79,6 +97,7 @@ test('posting a blog without title and url errors', async () => {
   }
   await api
     .post('/api/blogs')
+    .set('Authorization', 'bearer ' + globals.token)
     .send(newBlog)
     .expect(400)
 })
