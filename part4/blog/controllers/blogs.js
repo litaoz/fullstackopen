@@ -1,6 +1,5 @@
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
-const User = require('../models/user')
 
 blogsRouter.get('/', async (request, response) => {
   const blogs = await Blog.find({})
@@ -9,18 +8,7 @@ blogsRouter.get('/', async (request, response) => {
 })
 
 blogsRouter.post('/', async (request, response) => {
-  // if (request.token === null) {
-  //   return response.status(401).json({
-  //     'error': 'token missing or invalid'
-  //   })
-  // }
-  // const user = await User.findById(request.token.id)
-  // if (user === null) {
-  //   return response.status(401).json({
-  //     'error': 'user no longer exists'
-  //   })
-  // }
-  const user = await getUser(request, response)
+  const user = request.user
   const blogData = { ... request.body, 'user': user._id }
   const blog = new Blog(blogData)
   const result = await blog.save()
@@ -43,7 +31,7 @@ blogsRouter.put('/:id', async (request, response) => {
 })
 
 blogsRouter.delete('/:id', async (request, response) => {
-  const user = await getUser(request, response)
+  const user = request.user
   const id = request.params.id
   const blog = await Blog.findById(id)
   if (user.id !== blog.user.toString()) {
@@ -52,22 +40,5 @@ blogsRouter.delete('/:id', async (request, response) => {
   await Blog.findByIdAndRemove(id)
   return response.status(204).end()
 })
-
-const getUser = async (request, response) => {
-  if (request.token === null) {
-    response.status(401).json({
-      'error': 'token missing or invalid'
-    })
-    return
-  }
-  const user = await User.findById(request.token.id)
-  if (user === null) {
-    response.status(401).json({
-      'error': 'user no longer exists'
-    })
-    return
-  }
-  return user
-}
 
 module.exports = blogsRouter

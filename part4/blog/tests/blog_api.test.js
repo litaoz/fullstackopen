@@ -39,24 +39,31 @@ beforeEach(async () => {
 test('blogs are returned as json', async () => {
   await api
     .get('/api/blogs')
+    .set('Authorization', 'bearer ' + globals.user2token)
     .expect(200)
     .expect('Content-Type', /application\/json/)
 })
 
 test('there are ten blogs', async () => {
-  const response = await api.get('/api/blogs')
+  const response = await api
+    .get('/api/blogs')
+    .set('Authorization', 'bearer ' + globals.user2token)
   expect(response.body).toHaveLength(10)
 })
 
 test('there are ids for blogs', async () => {
-  const response = await api.get('/api/blogs')
+  const response = await api
+    .get('/api/blogs')
+    .set('Authorization', 'bearer ' + globals.user2token)
   for (let blog of response.body) {
     expect(blog.id).toBeDefined()
   }
 })
 
 test('there are users for blogs', async () => {
-  const response = await api.get('/api/blogs')
+  const response = await api
+    .get('/api/blogs')
+    .set('Authorization', 'bearer ' + globals.user2token)
   for (let blog of response.body) {
     expect(blog.user).toBeDefined()
   }
@@ -69,14 +76,15 @@ test('posting a blog', async () => {
     'url': 'me.com',
     'likes': 5
   }
-  console.log(globals.user2token)
   const response = await api
     .post('/api/blogs')
     .set('Authorization', 'bearer ' + globals.user2token)
     .send(newBlog)
   expect(response.body.title).toEqual('testing')
 
-  const allResponse = await api.get('/api/blogs')
+  const allResponse = await api
+    .get('/api/blogs')
+    .set('Authorization', 'bearer ' + globals.user2token)
   expect(allResponse.body).toHaveLength(helper.initBlogs.length + 1)
   const allTitles = allResponse.body.map(blog => blog.title)
   expect(allTitles).toContain('testing')
@@ -108,11 +116,13 @@ test('posting a blog without title and url errors', async () => {
     .expect(400)
 })
 
-test('delete a blog', async () => {
+test.only('delete a blog', async () => {
   const initialLength = helper.initBlogs.length
 
   // Get id of first blog
-  let blogs = await api.get('/api/blogs')
+  let blogs = await api
+    .get('/api/blogs')
+    .set('Authorization', 'bearer ' + globals.user2token)
   const id = blogs.body[0].id
 
   // delete first blog
@@ -122,13 +132,17 @@ test('delete a blog', async () => {
     .expect(204)
 
   // confirm length decreased by one
-  blogs = await api.get('/api/blogs')
+  blogs = await api
+    .get('/api/blogs')
+    .set('Authorization', 'bearer ' + globals.user2token)
   expect(blogs.body).toHaveLength(initialLength - 1)
 })
 
-test('delete a blog not authorized', async () => {
+test.only('delete a blog not authorized', async () => {
   // Get id of first blog
-  let blogs = await api.get('/api/blogs')
+  let blogs = await api
+    .get('/api/blogs')
+    .set('Authorization', 'bearer ' + globals.user2token)
   const id = blogs.body[0].id
 
   // delete first blog
@@ -145,15 +159,21 @@ test('edit a blog', async () => {
   }
 
   // Get id of first blog
-  let blogs = await api.get('/api/blogs')
+  let blogs = await api
+    .get('/api/blogs')
+    .set('Authorization', 'bearer ' + globals.user2token)
+
   const id = blogs.body[0].id
 
   // edit first blog
   await api
     .put(`/api/blogs/${id}`)
+    .set('Authorization', 'bearer ' + globals.user2token)
     .send(editedBlog)
 
-  const allResponse = await api.get('/api/blogs')
+  const allResponse = await api
+    .get('/api/blogs')
+    .set('Authorization', 'bearer ' + globals.user2token)
   const allTitles = allResponse.body.map(blog => blog.title)
   expect(allTitles).toContain('edited')
 })
